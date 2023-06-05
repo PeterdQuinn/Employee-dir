@@ -1,4 +1,4 @@
-document.getElementById('generate-button').addEventListener('click', generateEmployee);
+document.getElementById('employee-form').addEventListener('submit', addEmployee);
 
 const employees = [
     {name: "Alice", role: "Senior Developer", skills: ["JavaScript", "HTML", "CSS"]},
@@ -8,10 +8,34 @@ const employees = [
     // add more employee objects...
 ];
 
-function generateEmployee() {
-    const employee = employees[Math.floor(Math.random() * employees.length)];
-    
-    const li = document.createElement('li');
-    li.innerHTML = `<h2>${employee.name}</h2><p>${employee.role}</p><p>${employee.skills.join(', ')}</p>`;
-    document.getElementById('employee-list').prepend(li);
+function addEmployee(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const role = document.getElementById('role').value;
+    const skills = document.getElementById('skills').value.split(',');
+
+    const newEmployee = {name: name, role: role, skills: skills};
+    employees.push(newEmployee);
+
+    updateEmployeeList();
 }
+
+function updateEmployeeList() {
+    const list = document.getElementById('employee-list');
+    list.innerHTML = '';
+
+    for (let i = 0; i < employees.length; i++) {
+        const li = document.createElement('li');
+        li.innerHTML = `<h2>${employees[i].name}</h2><p>${employees[i].role}</p><p>${employees[i].skills.join(', ')}</p><button onclick="deleteEmployee(${i})">Delete</button>`;
+        list.appendChild(li);
+    }
+}
+
+function deleteEmployee(index) {
+    employees.splice(index, 1);
+    updateEmployeeList();
+}
+
+// Populate the list with the initial employees
+updateEmployeeList();
