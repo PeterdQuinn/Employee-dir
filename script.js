@@ -42,6 +42,8 @@ function updateEmployeeList() {
       <h2>${employee.name}</h2>
       <p>${employee.role}</p>
       <p>${employee.skills.join(', ')}</p>
+      <button onclick="editEmployee(${i})">Edit</button>
+      <button onclick="deleteEmployee(${i})">Delete</button>
     `;
     list.appendChild(li);
   }
@@ -66,6 +68,28 @@ function searchEmployees() {
 
 function saveEmployeesToLocalStorage() {
   localStorage.setItem('employees', JSON.stringify(employees));
+}
+
+function editEmployee(index) {
+  const employee = employees[index];
+  const name = prompt("Enter the employee's name:", employee.name);
+  const role = prompt("Enter the employee's role:", employee.role);
+  const skills = prompt("Enter the employee's skills (comma-separated):", employee.skills.join(','));
+
+  if (name && role && skills) {
+    employee.name = name;
+    employee.role = role;
+    employee.skills = skills.split(',');
+
+    updateEmployeeList();
+    saveEmployeesToLocalStorage();
+  }
+}
+
+function deleteEmployee(index) {
+  employees.splice(index, 1);
+  updateEmployeeList();
+  saveEmployeesToLocalStorage();
 }
 
 updateEmployeeList();
